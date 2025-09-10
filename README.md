@@ -8,7 +8,7 @@
 
 Đây là dự án mẫu về **Java Web sử dụng JSP và Servlet**, phù hợp cho các bạn mới học hoặc muốn tìm hiểu về lập trình web với Java. Dự án bao gồm các chức năng cơ bản như quản lý người dùng, đăng nhập, đăng ký, và xử lý dữ liệu với cơ sở dữ liệu MySQL.
 
-## 🚀 Tính năng
+## 🚀 Tính năng nổi bật
 
 - Đăng ký, đăng nhập người dùng
 - Quản lý thông tin người dùng
@@ -18,11 +18,33 @@
 
 ## 🛠️ Công nghệ sử dụng
 
-- Java Servlet & JSP
-- JDBC (Java Database Connectivity)
-- MySQL
-- HTML, CSS, Bootstrap
-- Apache Tomcat
+| Thành phần        | Phiên bản đề xuất      |
+|-------------------|-----------------------|
+| Java              | 8 trở lên (11/17 khuyến nghị) |
+| JSP & Servlet API | 2.3+ / 3.1+           |
+| Apache Tomcat     | 8.5, 9.x, 10.x        |
+| MySQL             | 5.7 hoặc 8.x          |
+| JDBC              | -                     |
+| Bootstrap         | 4.x/5.x (frontend UI) |
+| IDE               | Eclipse/IntelliJ/NetBeans |
+
+## 📦 Thư viện sử dụng
+
+- **Servlet API** (javax.servlet: có sẵn trong Tomcat)
+- **JSP API** (javax.servlet.jsp)
+- **JSTL** (`javax.servlet:jstl:1.2`)
+- **MySQL Connector/J** (`mysql:mysql-connector-java:8.x`)
+- **Bootstrap** (CDN hoặc tải về)
+- **jQuery** (nếu dùng JS nâng cao)
+
+> 🎯 Nếu dùng Maven/Gradle, các thư viện sẽ tự động tải về. Nếu không, hãy tải file JAR và đặt vào thư mục `WEB-INF/lib`.
+
+## 🧩 Yêu cầu phiên bản
+
+- **Java:** 8 trở lên (khuyến nghị Java 11 hoặc 17)
+- **Apache Tomcat:** 8.5, 9.x hoặc 10.x
+- **MySQL:** 5.7 hoặc 8.x
+- **IDE:** Eclipse, IntelliJ IDEA hoặc NetBeans bản mới nhất
 
 ## ⚡ Cài đặt & Hướng dẫn sử dụng
 
@@ -34,7 +56,11 @@
 2. **Import vào IDE**  
    Mở dự án bằng Eclipse, IntelliJ IDEA hoặc NetBeans.
 
-3. **Cấu hình Database**  
+3. **Thêm thư viện**  
+   - Dùng Maven: kiểm tra file `pom.xml` đã đủ dependencies JSTL, MySQL Connector chưa.
+   - Không dùng Maven: tải các file .jar và bỏ vào `WEB-INF/lib`.
+
+4. **Cấu hình Database**  
    - Tạo cơ sở dữ liệu MySQL theo file `database.sql` trong thư mục dự án.
    - Cập nhật thông tin kết nối DB trong file `DBUtil.java`:
      ```java
@@ -43,7 +69,7 @@
      private static final String JDBC_PASSWORD = "your_password";
      ```
 
-4. **Chạy project trên Tomcat**
+5. **Chạy project trên Tomcat**
 
 ## 📁 Cấu trúc thư mục
 
@@ -55,6 +81,7 @@ Java-Web-JSP-Servlet/
 │       │   └── ... (Servlets, Models, DAO)
 │       └── webapp/
 │           ├── WEB-INF/
+│           │   └── lib/ (các file .jar nếu không dùng Maven)
 │           └── ... (JSP files, resources)
 ├── database.sql
 ├── README.md
@@ -62,13 +89,13 @@ Java-Web-JSP-Servlet/
 
 ## 💡 Đóng góp
 
-Nếu bạn muốn đóng góp, hãy fork dự án, tạo branch mới và gửi pull request. Rất hoan nghênh mọi ý kiến đóng góp!
+Nếu bạn muốn đóng góp, hãy **fork** dự án, tạo **branch** mới và gửi **pull request**.  
+Rất hoan nghênh mọi ý kiến đóng góp!
 
 ## 📬 Liên hệ
 
 - **Tác giả:** [267T](https://github.com/267T)
-- **Email:** your-email@example.com
+- **Email:** toannguyen260724@gmail.com
 
----
 
 > Made with ❤️ by 267T
