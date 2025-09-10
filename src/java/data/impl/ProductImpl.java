@@ -143,5 +143,4 @@ public class ProductImpl implements ProductDao {
         int count = dao.cout("d");
         System.out.println(count);
     }
-    
 }

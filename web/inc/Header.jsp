@@ -25,12 +25,9 @@
                 <a href="#" class="hover:text-blue-600 transition">Liên hệ</a>
             </nav>
 
-            <!-- Ô tìm kiếm + user -->
-            <form action="Home" method="get" class="flex items-center space-x-3">
-                <input type="text" name="keyword" 
-                       value="${keyword}" 
-                       placeholder="Tìm kiếm..." 
-                       class="px-3 py-1 border rounded-lg focus:ring focus:ring-blue-200 outline-none"/>
+            <!-- Ô tìm kiếm + user truyền dữ liệu về homeServlect -->
+            <form action="FindProduct" method="get" class="flex items-center space-x-3">
+                <input type="text" name="keyword" value="${keyword}" placeholder="Tìm kiếm..." class="px-3 py-1 border rounded-lg focus:ring focus:ring-blue-200 outline-none"/>
                 <button type="submit" class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
                     <i class="fa fa-search"></i>
                 </button>

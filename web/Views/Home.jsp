@@ -17,7 +17,9 @@
         <c:import url="/inc/Banner.jsp"/>
         <c:import url="/inc/Category.jsp"/>
         <c:import url="/inc/Products.jsp"/>
+        <c:import url="/inc/Page.jsp"/>
         <c:import url="/inc/Footer.jsp"/>
+        
+        
     </body>
-    đã hoàn thành chức năng update12312312w321
 </html>

@@ -75,22 +75,8 @@ public class HomeServlet extends HttpServlet {
         // Lấy categoryId để xử lí
         String categoryId = request.getParameter("categoryId");
         List<Product> listProduct;
-        // xử lí dữ liệu tìm kiếm
-        // lấy tham số để xử lí
-        String keyword = request.getParameter("keyword");
-        List<Product> listFind;
 
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            listFind = productDao.find(keyword.trim());
-            request.setAttribute("keyword", keyword);
-            listProduct = listFind;   // gán kết quả tìm được vào listProduct
-            if (listFind != null && !listFind.isEmpty()) {
-                listProduct = listFind;   // có kết quả thì gán
-
-            } else {
-                request.setAttribute("error", "Không tìm thấy sản phẩm nào với từ khóa: " + keyword);
-            }
-        } else if (categoryId != null && !categoryId.isEmpty()) {
+        if (categoryId != null && !categoryId.isEmpty()) {
             try {
                 int cid = Integer.parseInt(categoryId);
                 listProduct = productDao.findByCategory(cid);
@@ -99,6 +85,7 @@ public class HomeServlet extends HttpServlet {
                 listProduct = productDao.findAll();
             }
         } else {
+            // mặc định hiển thị tất cả sản phẩm
             listProduct = productDao.findAll();
         }
 

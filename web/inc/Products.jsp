@@ -31,12 +31,7 @@
                 </div>
             </c:forEach>
         </div>
-        <!--             hiển thị lỗi khi tìm kiếm không có-->
-        <c:if test="${not empty error}">
-            <div style="color: red; font-weight: bold;">
-                ${error}
-            </div>
-        </c:if>
+
     </section>
 
 </div>
