@@ -19,5 +19,5 @@
         <c:import url="/inc/Products.jsp"/>
         <c:import url="/inc/Footer.jsp"/>
     </body>
-    test xem nó đã có ở trên nhánh main chưa
+    test lần nữa
 </html>
