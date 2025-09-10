@@ -9,7 +9,7 @@ package data.utils;
  * @author lab
  */
 public class Constants {
-    public static final String DB_URL="jdbc:mysql://localhost:3306/van_phong_pham";  // truy cập vào database
+    public static final String DB_URL="jdbc:mysql://localhost:3306/Van_Phong_Pham";  // truy cập vào database
     public static final String USER = "root";
     public static final String PASS="";
 }

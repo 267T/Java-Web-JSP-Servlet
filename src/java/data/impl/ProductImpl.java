@@ -89,6 +89,28 @@ public class ProductImpl implements ProductDao {
     public boolean delete(int id) {
         return false;
     }
+    
+    
+    
+    // đếm số lượng sản phẩm để phân trang tìm kiếm
+    @Override
+    public int cout(String keyword){
+        String sql = "select count(*) from products where product_name like N?";
+        PreparedStatement sttm;
+        try {
+            sttm = con.prepareStatement(sql);
+            sttm.setString(1, "%" + keyword +"%");
+            ResultSet rs = sttm.executeQuery();
+            
+            while (rs.next()) {
+                 return rs.getInt(1); // đếm được bao nhiêu sản phẩm thì nó sẽ hiển thị ở cột số 1 sau khi thực hiện truy vấns
+            }
+        } catch (SQLException ex) {
+        }
+        return 0;
+    }
+    
+    
     @Override
     public List<Product> find(String keyword) {
         List<Product> listFind = new ArrayList<>();
@@ -116,4 +138,10 @@ public class ProductImpl implements ProductDao {
 
         return listFind;
     }
+    public static void main(String[] args) {
+        ProductImpl dao = new ProductImpl();
+        int count = dao.cout("d");
+        System.out.println(count);
+    }
+    
 }

@@ -18,7 +18,7 @@ public class MySQLDriver {
     public static  Connection getConnection(){
         try {
             //Class.forName("com.mysql.jdbc.Driver"); gõ cái này trước rồi ấn fix để hiển thị try catch
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             try {
                 //return DriverManager.getConnection(Constants.DB_URL, Constants.USER, Constants.PASS);
                 return DriverManager.getConnection(Constants.DB_URL, Constants.USER, Constants.PASS);
