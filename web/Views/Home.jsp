@@ -19,5 +19,5 @@
         <c:import url="/inc/Products.jsp"/>
         <c:import url="/inc/Footer.jsp"/>
     </body>
-    đã hoàn thành chức năng update123123
+    đã hoàn thành chức năng update12312312w321
 </html>
