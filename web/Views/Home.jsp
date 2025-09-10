@@ -19,4 +19,5 @@
         <c:import url="/inc/Products.jsp"/>
         <c:import url="/inc/Footer.jsp"/>
     </body>
+    test login
 </html>
