@@ -19,5 +19,5 @@
         <c:import url="/inc/Products.jsp"/>
         <c:import url="/inc/Footer.jsp"/>
     </body>
-    test lần nữa
+    đã hoàn thành chức năng update
 </html>
