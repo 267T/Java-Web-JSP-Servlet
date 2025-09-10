@@ -1,89 +1,74 @@
-[VN]
+# Java-Web-JSP-Servlet
 
-🧠 Java Web Project - JSP & Servlet
-Đây là một bài tập môn "Java nâng cao", được phát triển nhằm mục tiêu luyện tập và nắm vững các kỹ thuật lập trình web với "JSP & Servlet" trong Java. Dự án đang trong quá trình phát triển và sẽ tiếp tục được mở rộng.
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
+![JSP](https://img.shields.io/badge/JSP-007396?style=for-the-badge&logo=java&logoColor=white)
+![Servlet](https://img.shields.io/badge/Servlet-6DB33F?style=for-the-badge&logo=apachetomcat&logoColor=white)
 
-🎯 Tính năng chính
-- 🔐 Đăng ký / Đăng nhập người dùng (có xử lý session/cookie)
-- 📦 Quản lý sản phẩm:
-  - Hiển thị danh sách sản phẩm
-  - Thêm / Sửa / Xóa sản phẩm
-- 🛢️ Kết nối cơ sở dữ liệu MySQL thông qua JDBC
-- 🎨 Giao diện được thiết kế responsive, sử dụng **Bootstrap**, **Tailwind CSS**, và **Font Awesome**
+## 📝 Mô tả
 
-🧰 Công nghệ sử dụng
-  - Java Servlet & JSP
-  - Apache Tomcat
-  - JDBC (MySQL)
-  - JSTL
-  - Maven
-  - Bootstrap + Tailwind CSS + Font Awesome
-  - HTML, CSS
-  - Session / Cookie
+Đây là dự án mẫu về **Java Web sử dụng JSP và Servlet**, phù hợp cho các bạn mới học hoặc muốn tìm hiểu về lập trình web với Java. Dự án bao gồm các chức năng cơ bản như quản lý người dùng, đăng nhập, đăng ký, và xử lý dữ liệu với cơ sở dữ liệu MySQL.
 
-🚀 Hướng dẫn chạy dự án
-1. Yêu cầu
-  - Java JDK 8+
-  - Apache Tomcat 9+
-  - MySQL Server
-  - IDE hỗ trợ Java EE (Eclipse, IntelliJ, NetBeans...)
+## 🚀 Tính năng
 
-2. Clone dự án
-Bạn có thể clone repo bằng một trong ba cách sau:
-  - **HTTPS:**
-    ```bash
-    git clone https://github.com/26TT/Java-Web-JSP-Servlet.git
-  - **SSH:**
-    ```bash
-    git clone git@github.com:26TT/Java-Web-JSP-Servlet.git
-  - **GitHub CLI:**
-    ```bash
-    gh repo clone 26TT/Java-Web-JSP-Servlet
+- Đăng ký, đăng nhập người dùng
+- Quản lý thông tin người dùng
+- Hiển thị danh sách, tìm kiếm, chỉnh sửa, xoá dữ liệu
+- Kết nối và thao tác với cơ sở dữ liệu MySQL
+- Áp dụng mô hình MVC
 
-[US]
-🧠 Java Web Project - JSP & Servlet  
-This is an "Advanced Java" coursework project, developed to practice and master web programming techniques using "JSP & Servlet" in Java. The project is currently under development and will be expanded further.
+## 🛠️ Công nghệ sử dụng
 
-🎯 Main Features  
-- 🔐 User Registration / Login (with session/cookie handling)  
-- 📦 Product Management:  
-  - Display product list  
-  - Add / Edit / Delete products  
-- 🛢️ Connect to MySQL database via JDBC  
-- 🎨 Responsive UI designed using **Bootstrap**, **Tailwind CSS**, and **Font Awesome**
+- Java Servlet & JSP
+- JDBC (Java Database Connectivity)
+- MySQL
+- HTML, CSS, Bootstrap
+- Apache Tomcat
 
-🧰 Technologies Used  
-  - Java Servlet & JSP  
-  - Apache Tomcat  
-  - JDBC (MySQL)  
-  - JSTL  
-  - Maven  
-  - Bootstrap + Tailwind CSS + Font Awesome  
-  - HTML, CSS  
-  - Session / Cookie
+## ⚡ Cài đặt & Hướng dẫn sử dụng
 
-🚀 How to Run  
-1. Requirements  
-  - Java JDK 8+  
-  - Apache Tomcat 9+  
-  - MySQL Server  
-  - Java EE-compatible IDE (Eclipse, IntelliJ, NetBeans...)
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/267T/Java-Web-JSP-Servlet.git
+   ```
 
-2. Clone the project  
-You can clone the repository using one of the following methods:  
-  - **HTTPS:**  
-    ```bash
-    git clone https://github.com/26TT/Java-Web-JSP-Servlet.git
-    ```
-  - **SSH:**  
-    ```bash
-    git clone git@github.com:26TT/Java-Web-JSP-Servlet.git
-    ```
-  - **GitHub CLI:**  
-    ```bash
-    gh repo clone 26TT/Java-Web-JSP-Servlet
-    ```
+2. **Import vào IDE**  
+   Mở dự án bằng Eclipse, IntelliJ IDEA hoặc NetBeans.
 
+3. **Cấu hình Database**  
+   - Tạo cơ sở dữ liệu MySQL theo file `database.sql` trong thư mục dự án.
+   - Cập nhật thông tin kết nối DB trong file `DBUtil.java`:
+     ```java
+     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/ten_database";
+     private static final String JDBC_USERNAME = "root";
+     private static final String JDBC_PASSWORD = "your_password";
+     ```
 
+4. **Chạy project trên Tomcat**
 
-    
+## 📁 Cấu trúc thư mục
+
+```
+Java-Web-JSP-Servlet/
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── ... (Servlets, Models, DAO)
+│       └── webapp/
+│           ├── WEB-INF/
+│           └── ... (JSP files, resources)
+├── database.sql
+├── README.md
+```
+
+## 💡 Đóng góp
+
+Nếu bạn muốn đóng góp, hãy fork dự án, tạo branch mới và gửi pull request. Rất hoan nghênh mọi ý kiến đóng góp!
+
+## 📬 Liên hệ
+
+- **Tác giả:** [267T](https://github.com/267T)
+- **Email:** your-email@example.com
+
+---
+
+> Made with ❤️ by 267T
