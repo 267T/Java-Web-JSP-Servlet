@@ -26,6 +26,7 @@
 | MySQL             | 5.7 hoặc 8.x          |
 | JDBC              | -                     |
 | Bootstrap         | 4.x/5.x (frontend UI) |
+| tailwindcss       | (frontend UI)         |
 | IDE               | Eclipse/IntelliJ/NetBeans |
 
 ## 📦 Thư viện sử dụng
