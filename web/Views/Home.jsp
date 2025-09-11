@@ -13,13 +13,22 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
     <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
-        <c:import url="/inc/Header.jsp"/>
-        <c:import url="/inc/Banner.jsp"/>
-        <c:import url="/inc/Category.jsp"/>
-        <c:import url="/inc/Products.jsp"/>
-        <c:import url="/inc/Page.jsp"/>
-        <c:import url="/inc/Footer.jsp"/>
+        <jsp:include page="/inc/Header.jsp"/>
+        <jsp:include page="/inc/Banner.jsp"/>
+        <jsp:include page="/inc/Category.jsp"/>
+        <jsp:include page="/inc/Products.jsp"/>
+
+        <div class="flex justify-center items-center space-x-2 mt-8">
+            <!-- Các số trang -->
+            <c:forEach var="i" begin="1" end="${endpage}">
+                <p>${i}</p>
+            </c:forEach>
+        </div>
         
         
+        
+        <jsp:include page="/inc/Footer.jsp"/>
+
+
     </body>
 </html>

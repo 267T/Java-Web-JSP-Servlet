@@ -17,7 +17,7 @@ public interface ProductDao {
     List<Product> findByCategory(int categoryId);
     
     List<Product> find(String keyword); // để hắn có thể trả về 1 dãy kết quả
-    int cout(String keyword);
+    int cout(); // đếm số lượng sản phẩm để phân trang
 
     boolean insert(Product product);
 

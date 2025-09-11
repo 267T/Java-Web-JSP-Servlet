@@ -92,18 +92,17 @@ public class ProductImpl implements ProductDao {
     
     
     
-    // đếm số lượng sản phẩm để phân trang tìm kiếm
+    // đếm số lượng sản phẩm để phân trang
     @Override
-    public int cout(String keyword){
-        String sql = "select count(*) from products where product_name like N?";
+    public int cout(){
+        String sql = "select count(*) from products ";
         PreparedStatement sttm;
         try {
             sttm = con.prepareStatement(sql);
-            sttm.setString(1, "%" + keyword +"%");
             ResultSet rs = sttm.executeQuery();
             
             while (rs.next()) {
-                 return rs.getInt(1); // đếm được bao nhiêu sản phẩm thì nó sẽ hiển thị ở cột số 1 sau khi thực hiện truy vấns
+                 return rs.getInt(1); // đếm được bao nhiêu sản phẩm thì nó sẽ hiển thị ở cột số 1 sau khi thực hiện truy vấn
             }
         } catch (SQLException ex) {
         }
@@ -137,10 +136,9 @@ public class ProductImpl implements ProductDao {
         }
 
         return listFind;
-    }
+    } 
     public static void main(String[] args) {
         ProductImpl dao = new ProductImpl();
-        int count = dao.cout("d");
-        System.out.println(count);
+ 
     }
 }

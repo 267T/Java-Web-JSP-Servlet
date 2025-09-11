@@ -38,18 +38,8 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        // vì luôn dùng hàm này nên phải ghi ở processRequest
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -67,6 +57,12 @@ public class HomeServlet extends HttpServlet {
 
         ProductDao productDao = new ProductImpl();
         CategoryDao categoryDao = new CategoryImpl();
+        // hiển thị số lượng trang
+        int cout = productDao.cout();
+        int endpage = cout / 3;
+        if (cout % 3 != 0) {
+            endpage++;
+        }
 
         // Lấy danh mục sản phẩm
         List<Category> listCategory = categoryDao.findAll();
@@ -91,6 +87,7 @@ public class HomeServlet extends HttpServlet {
 
         request.setAttribute("listProduct", listProduct);
         request.setAttribute("title", "Home Page");
+        request.setAttribute("endpage", endpage); // đẩy số lượng trang lên lại trang jsp
         request.getRequestDispatcher("Views/Home.jsp").forward(request, response);
     }
 
@@ -108,11 +105,6 @@ public class HomeServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

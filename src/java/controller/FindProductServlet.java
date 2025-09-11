@@ -35,22 +35,25 @@ public class FindProductServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try {
-            // Phân trang
+            // xử lí tìm kiếm 
+            List<Product> listproduct = null;
             String keyword = request.getParameter("keyword");
             ProductDao productDao = new ProductImpl();
-            int count = productDao.cout(keyword);
-            int pagesize = 2;
-            int endpage = count / pagesize;
-            if (count % pagesize != 0) {
-                endpage++;
-            }
 
-            request.setAttribute("end", endpage);
+            if (keyword != null || !keyword.trim().isEmpty()) {
+                listproduct = productDao.find(keyword.trim());
+                request.setAttribute("keyword", keyword);
+                if (listproduct == null || listproduct.isEmpty()) {
+                    request.setAttribute("error_find", "Không tìm thấy sản phẩm: " + keyword);
+                }
+            }
+           
+            // đẩy dữ liệu sang trang jsp
+            request.setAttribute("listProduct", listproduct);
+            request.setAttribute("title", "Kết quả tìm kiếm");
             request.getRequestDispatcher("Views/ResultSearch.jsp").forward(request, response);
 
         } catch (Exception e) {
-            
-           
         }
     }
 
@@ -66,23 +69,6 @@ public class FindProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String keyword = request.getParameter("keyword");
-        ProductDao productDao = new ProductImpl();
-
-        List<Product> listProduct = null;
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            listProduct = productDao.find(keyword.trim());
-            request.setAttribute("keyword", keyword);
-
-            if (listProduct == null || listProduct.isEmpty()) {
-                request.setAttribute("error_find","Không tìm thấy sản phẩm: "+keyword);
-            }
-        }
-
-        request.setAttribute("listProduct", listProduct);
-        request.setAttribute("title", "Kết quả tìm kiếm");
-        request.getRequestDispatcher("Views/ResultSearch.jsp").forward(request, response);
     }
 
     /**
