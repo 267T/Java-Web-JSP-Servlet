@@ -11,25 +11,25 @@
     <!-- Danh mục -->
     <section class="max-w-7xl mx-auto px-4 py-12">
         <h2 class="text-2xl font-bold mb-8">Danh mục</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
-            
-            <!-- Chỉ hiển thị danh mục cha -->
+        <!-- Dùng flex + scroll ngang -->
+        <div class="flex space-x-4 overflow-x-auto scrollbar-hide">
+            <!-- Nút xem tất cả sản phẩm -->
+            <a href="Home" 
+               class="flex-shrink-0 min-w-[120px] bg-white p-5 rounded-lg shadow hover:shadow-xl hover:-translate-y-1 transition text-center
+               <c:if test='${selectedCategory == null}'> border-2 border-blue-500</c:if>">
+                   <p class="font-semibold">Tất cả</p>
+               </a>
+               <!-- Chỉ hiển thị danh mục cha -->
             <c:forEach var="cate" items="${listCategory}">
                 <c:if test="${empty cate.parent_id}">
                     <a href="Home?categoryId=${cate.category_id}" 
-                       class="bg-white p-5 rounded-lg shadow hover:shadow-xl hover:-translate-y-1 transition text-center
-                       <c:if test='${selectedCategory == cate.category_id}'>border-2 border-blue-500</c:if>">
+                       class="flex-shrink-0 min-w-[120px] bg-white p-5 rounded-lg shadow hover:shadow-xl hover:-translate-y-1 transition text-center
+                       <c:if test='${selectedCategory == cate.category_id}'> border-2 border-blue-500</c:if>">
                         <p class="font-semibold">${cate.category_name}</p>
                     </a>
                 </c:if>
             </c:forEach>
-            
-            <!-- Nút xem tất cả sản phẩm -->
-            <a href="Home" 
-               class="bg-white p-5 rounded-lg shadow hover:shadow-xl hover:-translate-y-1 transition text-center
-               <c:if test='${selectedCategory == null}'>border-2 border-blue-500</c:if>">
-                <p class="font-semibold">Tất cả</p>
-            </a>
         </div>
     </section>
+
 </html>

@@ -13,16 +13,24 @@ import model.Product;
  */
 public interface ProductDao {
 
-    List<Product> findAll();
-    List<Product> findByCategory(int categoryId);
     
-    List<Product> find(String keyword); // để hắn có thể trả về 1 dãy kết quả
+    List<Product> find(String keyword);
+    
+    
+    // phân trang cho sản phẩm theo danh mục sản phẩm
+    List<Product> pagingCategoryByProduct (int categoryId,int index);
+    int CoutProductByCategory(int categoryId);
+    
+    
+    //phân trang cho sản phẩm
+    List<Product> pagingProduct(int index);
     int cout(); // đếm số lượng sản phẩm để phân trang
 
+    
+    
+    
     boolean insert(Product product);
-
     boolean update(Product product);
-
     boolean delete(int id);
 
     

@@ -55,14 +55,19 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // lấy dữ liệu index trong Home?index=${i}
+        String indexpage = request.getParameter("index"); // lấy được chỉ số index trong link, nhưng lúc này nó là string ta phải chuyển nó về dạng int đã
+        int index = 1; // mặc định trang đầu
+        if (indexpage != null) {
+            try {
+                index = Integer.parseInt(indexpage); // chuển nó về dạng int
+            } catch (NumberFormatException e) {
+                index = 1;
+            }
+        }
+        // có index rồi giờ truyền vào DAO để thực hiện truy vấn1
         ProductDao productDao = new ProductImpl();
         CategoryDao categoryDao = new CategoryImpl();
-        // hiển thị số lượng trang
-        int cout = productDao.cout();
-        int endpage = cout / 3;
-        if (cout % 3 != 0) {
-            endpage++;
-        }
 
         // Lấy danh mục sản phẩm
         List<Category> listCategory = categoryDao.findAll();
@@ -71,22 +76,32 @@ public class HomeServlet extends HttpServlet {
         // Lấy categoryId để xử lí
         String categoryId = request.getParameter("categoryId");
         List<Product> listProduct;
+        int endpage;
 
         if (categoryId != null && !categoryId.isEmpty()) {
-            try {
-                int cid = Integer.parseInt(categoryId);
-                listProduct = productDao.findByCategory(cid);
-                request.setAttribute("selectedCategory", cid);
-            } catch (NumberFormatException e) {
-                listProduct = productDao.findAll();
+
+            int cid = Integer.parseInt(categoryId);
+            int count = productDao.CoutProductByCategory(cid);
+            // hiển thị số lượng trang
+            endpage = count / 3;
+            if (count % 3 != 0) {
+                endpage++;
             }
+            listProduct = productDao.pagingCategoryByProduct(cid, index);
+            
+            request.setAttribute("selectedCategory", cid);
+
         } else {
+            int count = productDao.cout(); // đếm tất cả sản phẩm
+            endpage = count / 3;
+            if (count % 3 != 0) {
+                endpage++;
+            }
             // mặc định hiển thị tất cả sản phẩm
-            listProduct = productDao.findAll();
+            listProduct = productDao.pagingProduct(index);
         }
 
         request.setAttribute("listProduct", listProduct);
-        request.setAttribute("title", "Home Page");
         request.setAttribute("endpage", endpage); // đẩy số lượng trang lên lại trang jsp
         request.getRequestDispatcher("Views/Home.jsp").forward(request, response);
     }

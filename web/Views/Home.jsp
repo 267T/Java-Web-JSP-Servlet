@@ -19,16 +19,24 @@
         <jsp:include page="/inc/Products.jsp"/>
 
         <div class="flex justify-center items-center space-x-2 mt-8">
-            <!-- Các số trang -->
             <c:forEach var="i" begin="1" end="${endpage}">
-                <p>${i}</p>
+                <!-- Nếu có selectedCategory thì giữ categoryId -->
+                <c:if test="${not empty selectedCategory}">
+                    <a class="px-3 py-1 border rounded hover:bg-gray-200"
+                       href="Home?categoryId=${selectedCategory}&index=${i}">
+                        ${i}
+                    </a>
+                </c:if>
+
+                <!-- Nếu không có selectedCategory thì chỉ truyền index -->
+                <c:if test="${empty selectedCategory}">
+                    <a class="px-3 py-1 border rounded hover:bg-gray-200"
+                       href="Home?index=${i}">
+                        ${i}
+                    </a>
+                </c:if>
             </c:forEach>
         </div>
-        
-        
-        
         <jsp:include page="/inc/Footer.jsp"/>
-
-
     </body>
 </html>
