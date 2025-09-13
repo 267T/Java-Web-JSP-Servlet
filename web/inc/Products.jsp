@@ -20,7 +20,7 @@
                     <p class="text-gray-600 text-sm">Còn lại: ${p.quantity}</p>
 
                     <!-- Nút thêm vào giỏ hàng -->
-                    <form action="CartServlet" method="post">
+                    <form action="Cart" method="post">
                         <input type="hidden" name="action" value="add"/>
                         <input type="hidden" name="id" value="${p.product_id}"/>
                         <button type="submit" 

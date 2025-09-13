@@ -9,9 +9,9 @@ package model;
  * @author Admin
  */
 public class CartItem {
-    private int itemId;       // PK
-    private int cartId;       // FK -> carts
-    private Product product;  // Thông tin sản phẩm
+    private int itemId;       
+    private int cartId;       
+    private Product product; 
     private int quantity;
 
     public int getItemId() {

@@ -27,7 +27,7 @@ public class CartImpl implements CartDao {
     // kiểm tra xem giỏ hàng đã có chưa để khởi tạo
     @Override
     public Cart findActiveCartByUserId(int user_id) {
-        String sql = "SELECT status FROM carts WHERE user_id = ? AND status = 'Active' limit 1";
+        String sql = "SELECT cart_id, user_id, status, create_at FROM carts WHERE user_id = ? AND status = 'Active' limit 1";
         try {
             PreparedStatement sttm = con.prepareStatement(sql);
             sttm.setInt(1, user_id);
@@ -108,10 +108,53 @@ public class CartImpl implements CartDao {
         return items;
     }
 
+    // lấy tổng số tiền cần thanh toán
     @Override
-    public void AddItem(Product product, int quantily) {
-        List<Cart> listcart = new ArrayList<>();
+    public double getTotal(int cart_id) {
+        String sql = "SELECT SUM(ci.quantity * p.price) FROM cart_items ci JOIN products p ON ci.product_id = p.product_id WHERE ci.cart_id = ?";
+        try {
+            PreparedStatement sttm = con.prepareStatement(sql);
+            sttm.setInt(1, cart_id);
+            ResultSet rs = sttm.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+        } catch (Exception e) {
+            
+        }
+        return 0;
+    }
+    
+    // thêm sản phẩm vào giỏ hàng
+    public void AddItem(int cart_id, Product product, int quantity) {
+        String checkSql = "SELECT quantity FROM cart_items WHERE cart_id = ? AND product_id = ?";
+        try {
+            PreparedStatement check = con.prepareStatement(checkSql);
+            check.setInt(1, cart_id);
+            check.setInt(2, product.getProduct_id());
+            ResultSet rs = check.executeQuery();
 
+            if (rs.next()) {
+                // Nếu đã tồn tại -> update số lượng
+                int currentQuantity = rs.getInt("quantity");
+                String updateSql = "UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND product_id = ?";
+                PreparedStatement update = con.prepareStatement(updateSql);
+                update.setInt(1, currentQuantity + quantity);
+                update.setInt(2, cart_id);
+                update.setInt(3, product.getProduct_id());
+                update.executeUpdate();
+            } else {
+                // Nếu chưa có -> insert mới
+                String insertSql = "INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?, ?, ?)";
+                PreparedStatement insert = con.prepareStatement(insertSql);
+                insert.setInt(1, cart_id);
+                insert.setInt(2, product.getProduct_id());
+                insert.setInt(3, quantity);
+                insert.executeUpdate();
+            }
+        } catch (Exception e) {
+            
+        }
     }
 
 }

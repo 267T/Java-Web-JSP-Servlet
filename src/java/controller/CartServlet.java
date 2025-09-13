@@ -4,6 +4,7 @@
  */
 package controller;
 
+import data.dao.Database;
 import data.dao.ProductDao;
 import data.impl.ProductImpl;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import model.CartItem;
 import model.Product;
 
 /**
@@ -62,16 +64,20 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        ProductDao productdao = new ProductImpl();
-        String action = request.getParameter("action");
-        HttpSession session = request.getSession(); // khởi tạo session
-        
-        
-        
-        
-        
-        request.getRequestDispatcher("./Views/Cart.jsp").include(request, response);
+
+        Integer cartId = (Integer) request.getSession().getAttribute("CartId");
+        if (cartId == null) {
+            response.sendRedirect("Login");
+            return;
+        }
+
+        List<CartItem> items = Database.getCartDao().GetItems(cartId);
+        //double total = Database.getCartDao().getTotal(cartId);
+
+        request.setAttribute("items", items);
+        //request.setAttribute("total", total);
+
+        request.getRequestDispatcher("./Views/Cart.jsp").forward(request, response);
     }
 
     /**
@@ -85,7 +91,20 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action"); // lấy hành động
+        int product_id = Integer.parseInt(request.getParameter("id")); // lấy id của mặt hàng
+        
+        Integer cart_id = (Integer) request.getSession().getAttribute("CartId"); // có thể null nên phải dùng Integer làm kiểu dữ liệu
+        
+        if(cart_id == null){
+            response.sendRedirect("Login"); // nếu mà đăng nhập chưa có cart thì bắt đăng nhập lại
+            return;
+        }
+        if("add".equals(action)){
+            Product product = Database.getProductDao().getProductById(product_id).get(0);
+            Database.getCartDao().AddItem(cart_id, product, 1);
+        }
+        response.sendRedirect("Cart");
     }
 
     /**

@@ -19,11 +19,12 @@ public interface CartDao {
     
     // lấy sản phẩm có sẵn trong giỏ hàng ra
     public List<CartItem> GetItems(int cart_id);
+    // lấy ra tổng tiền của sản phẩm
+    public double getTotal(int cart_id);
     
     
     
     
     
-    
-    public void AddItem(Product product, int quantily);
+    public void AddItem(int cart_id,Product product, int quantily);
 }
