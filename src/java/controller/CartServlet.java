@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Product;
 
@@ -63,8 +64,8 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         ProductDao productdao = new ProductImpl();
-        List<Product> listproduct; // lấy dữ liệu sản phẩm
-        listproduct = productdao.getProductById(0);
+        String action = request.getParameter("action");
+        HttpSession session = request.getSession(); // khởi tạo session
         
         
         
