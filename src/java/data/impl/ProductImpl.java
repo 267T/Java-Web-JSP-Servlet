@@ -11,8 +11,6 @@ import data.driver.MySQLDriver;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -122,20 +120,16 @@ public class ProductImpl implements ProductDao {
         return list;
     }
     
-    
-    
-    
-    
+    // lấy sản phẩm để thêm vào giỏ hàng
     @Override
-    public List<Product> find(String keyword) {
-        List<Product> listFind = new ArrayList<>();
-        String sql = "select * from products where product_name like N?";
+    public List<Product> getProductById(int productid){
+        List<Product> ListProduct = new ArrayList<>();
+        String sql = "select * from products where product_id = ?";
         PreparedStatement sttm;
         try {
             sttm = con.prepareStatement(sql);
-            sttm.setString(1, "%" + keyword +"%");
+            sttm.setInt(1, productid);
             ResultSet rs = sttm.executeQuery();
-            
             while (rs.next()) {
                 int product_id = rs.getInt("product_id");
                 int category_id = rs.getInt("category_id");
@@ -144,26 +138,59 @@ public class ProductImpl implements ProductDao {
                 double price = rs.getDouble("price");
                 String imge = rs.getString("image");
                 String description = rs.getString("description");
-                listFind.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
+                ListProduct.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
             }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
         }
-
-        return listFind;
+        return ListProduct;
     }
-    
-    
-    
-    
     
     
     
     public static void main(String[] args) {
         ProductImpl dao = new ProductImpl();
-       int test = dao.CoutProductByCategory(4);
-        System.out.println(test);
+        List<Product> list = dao.getProductById(1);
+        for (Product product : list) {
+            System.out.println(product);
+        }
  
     }
+    
+    
+    
+//    @Override
+//    public List<Product> find(String keyword) {
+//        List<Product> listFind = new ArrayList<>();
+//        String sql = "select * from products where product_name like N?";
+//        PreparedStatement sttm;
+//        try {
+//            sttm = con.prepareStatement(sql);
+//            sttm.setString(1, "%" + keyword +"%");
+//            ResultSet rs = sttm.executeQuery();
+//            
+//            while (rs.next()) {
+//                int product_id = rs.getInt("product_id");
+//                int category_id = rs.getInt("category_id");
+//                String product_name = rs.getString("product_name");
+//                int quantity = rs.getInt("quantity");
+//                double price = rs.getDouble("price");
+//                String imge = rs.getString("image");
+//                String description = rs.getString("description");
+//                listFind.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
+//            }
+//            
+//        } catch (SQLException ex) {
+//            Logger.getLogger(ProductImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        return listFind;
+//    }
+//    
+    
+    
+    
+    
+    
+    
+    
 }

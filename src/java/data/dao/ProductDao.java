@@ -26,7 +26,8 @@ public interface ProductDao {
     List<Product> pagingProduct(int index);
     int cout(); // đếm số lượng sản phẩm để phân trang
 
-    
+    // lấy sản phẩm để lưu nó vào giỏ hàng
+    List<Product> getProductById(int productid);
     
     
     boolean insert(Product product);

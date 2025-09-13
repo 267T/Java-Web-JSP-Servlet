@@ -27,7 +27,6 @@
                         ${i}
                     </a>
                 </c:if>
-
                 <!-- Nếu không có selectedCategory thì chỉ truyền index -->
                 <c:if test="${empty selectedCategory}">
                     <a class="px-3 py-1 border rounded hover:bg-gray-200"
