@@ -38,18 +38,8 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        // vì luôn dùng hàm này nên phải ghi ở processRequest
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -65,6 +55,17 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // lấy dữ liệu index trong Home?index=${i}
+        String indexpage = request.getParameter("index"); // lấy được chỉ số index trong link, nhưng lúc này nó là string ta phải chuyển nó về dạng int đã
+        int index = 1; // mặc định trang đầu
+        if (indexpage != null) {
+            try {
+                index = Integer.parseInt(indexpage); // chuển nó về dạng int
+            } catch (NumberFormatException e) {
+                index = 1;
+            }
+        }
+        // có index rồi giờ truyền vào DAO để thực hiện truy vấn1
         ProductDao productDao = new ProductImpl();
         CategoryDao categoryDao = new CategoryImpl();
 
@@ -75,35 +76,33 @@ public class HomeServlet extends HttpServlet {
         // Lấy categoryId để xử lí
         String categoryId = request.getParameter("categoryId");
         List<Product> listProduct;
-        // xử lí dữ liệu tìm kiếm
-        // lấy tham số để xử lí
-        String keyword = request.getParameter("keyword");
-        List<Product> listFind;
+        int endpage;
 
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            listFind = productDao.find(keyword.trim());
-            request.setAttribute("keyword", keyword);
-            listProduct = listFind;   // gán kết quả tìm được vào listProduct
-            if (listFind != null && !listFind.isEmpty()) {
-                listProduct = listFind;   // có kết quả thì gán
+        if (categoryId != null && !categoryId.isEmpty()) {
 
-            } else {
-                request.setAttribute("error", "Không tìm thấy sản phẩm nào với từ khóa: " + keyword);
+            int cid = Integer.parseInt(categoryId);
+            int count = productDao.CoutProductByCategory(cid);
+            // hiển thị số lượng trang
+            endpage = count / 3;
+            if (count % 3 != 0) {
+                endpage++;
             }
-        } else if (categoryId != null && !categoryId.isEmpty()) {
-            try {
-                int cid = Integer.parseInt(categoryId);
-                listProduct = productDao.findByCategory(cid);
-                request.setAttribute("selectedCategory", cid);
-            } catch (NumberFormatException e) {
-                listProduct = productDao.findAll();
-            }
+            listProduct = productDao.pagingCategoryByProduct(cid, index);
+            
+            request.setAttribute("selectedCategory", cid);
+
         } else {
-            listProduct = productDao.findAll();
+            int count = productDao.cout(); // đếm tất cả sản phẩm
+            endpage = count / 3;
+            if (count % 3 != 0) {
+                endpage++;
+            }
+            // mặc định hiển thị tất cả sản phẩm
+            listProduct = productDao.pagingProduct(index);
         }
 
         request.setAttribute("listProduct", listProduct);
-        request.setAttribute("title", "Home Page");
+        request.setAttribute("endpage", endpage); // đẩy số lượng trang lên lại trang jsp
         request.getRequestDispatcher("Views/Home.jsp").forward(request, response);
     }
 
@@ -121,11 +120,6 @@ public class HomeServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

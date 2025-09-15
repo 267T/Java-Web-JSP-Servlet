@@ -13,12 +13,29 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
     <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
-        <c:import url="/inc/Header.jsp"/>
-        <c:import url="/inc/Banner.jsp"/>
-        <c:import url="/inc/Category.jsp"/>
-        <c:import url="/inc/Products.jsp"/>
-        <c:import url="/inc/Footer.jsp"/>
-    </body>
+        <jsp:include page="/inc/Header.jsp"/>
+        <jsp:include page="/inc/Banner.jsp"/>
+        <jsp:include page="/inc/Category.jsp"/>
+        <jsp:include page="/inc/Products.jsp"/>
 
-    đã hoàn thành chức năng update12312312w321
+        <div class="flex justify-center items-center space-x-2 mt-8">
+            <c:forEach var="i" begin="1" end="${endpage}">
+                <!-- Nếu có selectedCategory thì giữ categoryId -->
+                <c:if test="${not empty selectedCategory}">
+                    <a class="px-3 py-1 border rounded hover:bg-gray-200"
+                       href="Home?categoryId=${selectedCategory}&index=${i}">
+                        ${i}
+                    </a>
+                </c:if>
+                <!-- Nếu không có selectedCategory thì chỉ truyền index -->
+                <c:if test="${empty selectedCategory}">
+                    <a class="px-3 py-1 border rounded hover:bg-gray-200"
+                       href="Home?index=${i}">
+                        ${i}
+                    </a>
+                </c:if>
+            </c:forEach>
+        </div>
+        <jsp:include page="/inc/Footer.jsp"/>
+    </body>
 </html>

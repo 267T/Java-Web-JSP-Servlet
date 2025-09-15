@@ -11,8 +11,6 @@ import data.driver.MySQLDriver;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,60 +19,7 @@ import java.util.logging.Logger;
 public class ProductImpl implements ProductDao {
 
     Connection con = MySQLDriver.getConnection();
-
-    @Override
-    public List<Product> findAll() {
-        List<Product> listProduct = new ArrayList<>(); // khởi tạo 1 danh sách rỗng để lưu dữ liệu sau khi truy vấn
-        String sql = "select * from products";
-
-        try {
-            //PreparedStatement sttm = con.prepareStatement(sql); gõ cái này rồi ấn fix để ra try catch
-            PreparedStatement sttm = con.prepareStatement(sql);
-            ResultSet rs = sttm.executeQuery();
-            while (rs.next()) {
-                int product_id = rs.getInt("product_id");
-                int category_id = rs.getInt("category_id");
-                String product_name = rs.getString("product_name");
-                int quantity = rs.getInt("quantity");
-                double price = rs.getDouble("price");
-                String imge = rs.getString("image");
-                String description = rs.getString("description");
-                listProduct.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(CategoryImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return listProduct;
-    }
-
-    @Override
-    public List<Product> findByCategory(int categoryId) {
-        List<Product> listFilter = new ArrayList<>();
-        String sql = "SELECT * FROM products "
-                + "WHERE category_id = ? "
-                + "OR category_id IN (SELECT category_id FROM categories WHERE parent_id = ?)";
-        try {
-            PreparedStatement sttm = con.prepareStatement(sql);
-            sttm.setInt(1, categoryId);
-            sttm.setInt(2, categoryId);
-            ResultSet rs = sttm.executeQuery();
-            while (rs.next()) {
-                int product_id = rs.getInt("product_id");
-                int category_id = rs.getInt("category_id");
-                String product_name = rs.getString("product_name");
-                int quantity = rs.getInt("quantity");
-                double price = rs.getDouble("price");
-                String imge = rs.getString("image");
-                String description = rs.getString("description");
-                listFilter.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return listFilter;
-    }
-
+    
     @Override
     public boolean insert(Product product) {
         return false;
@@ -89,16 +34,34 @@ public class ProductImpl implements ProductDao {
     public boolean delete(int id) {
         return false;
     }
+    
+    
+    
+    // đếm số lượng sản phẩm để phân trang
     @Override
-    public List<Product> find(String keyword) {
-        List<Product> listFind = new ArrayList<>();
-        String sql = "select * from products where product_name like N?";
+    public int cout(){
+        String sql = "select count(*) from products ";
         PreparedStatement sttm;
         try {
             sttm = con.prepareStatement(sql);
-            sttm.setString(1, "%" + keyword +"%");
             ResultSet rs = sttm.executeQuery();
             
+            while (rs.next()) {
+                 return rs.getInt(1); // đếm được bao nhiêu sản phẩm thì nó sẽ hiển thị ở cột số 1 sau khi thực hiện truy vấn
+            }
+        } catch (SQLException ex) {
+        }
+        return 0;
+    }
+    @Override
+    public List<Product> pagingProduct (int index){
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT * FROM products ORDER BY product_id LIMIT 3 OFFSET ?";
+        PreparedStatement sttm;
+        try {
+            sttm = con.prepareStatement(sql);
+            sttm.setInt(1, (index-1)*3); //số 1 là dấu chấm hỏi thứ 1. vì truyền index 1 thì 1-1*3 = 0 thì lấy các sản phẩm có stt từ 0 đến 3
+            ResultSet rs = sttm.executeQuery();
             while (rs.next()) {
                 int product_id = rs.getInt("product_id");
                 int category_id = rs.getInt("category_id");
@@ -107,13 +70,127 @@ public class ProductImpl implements ProductDao {
                 double price = rs.getDouble("price");
                 String imge = rs.getString("image");
                 String description = rs.getString("description");
-                listFind.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
+                list.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
             }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
         }
-
-        return listFind;
+        return list;
     }
+    // đếm số lượng sản phẩm theo category
+    @Override
+    public int CoutProductByCategory(int categoryId){
+        String sql = "SELECT COUNT(*) FROM products WHERE category_id IN (SELECT category_id FROM categories WHERE parent_id = ? OR category_id = ?)";
+        PreparedStatement sttm;
+        try {
+            sttm = con.prepareStatement(sql);
+            sttm.setInt(1, categoryId);
+            sttm.setInt(2, categoryId);
+            ResultSet rs = sttm.executeQuery();
+            
+            if(rs.next()){
+                return rs.getInt(1); // lấy giá trị ở cột 1
+            }
+        } catch (SQLException ex) {
+        }
+        return 0;
+    }
+    @Override
+    public List<Product> pagingCategoryByProduct (int categoryId,int index){
+        List<Product> list = new ArrayList<>();
+        String sql = "select * from products where category_id = ? or category_id in (select category_id from categories where parent_id = ?) order by product_id limit 3 offset ?";
+        PreparedStatement sttm;
+        try {
+            sttm = con.prepareStatement(sql);
+            sttm.setInt(1, categoryId);
+            sttm.setInt(2, categoryId);
+            sttm.setInt(3, (index-1)*3); //số 1 là dấu chấm hỏi thứ 1. vì truyền index 1 thì 1-1*3 = 0 thì lấy các sản phẩm có stt từ 0 đến 3
+            ResultSet rs = sttm.executeQuery();
+            while (rs.next()) {
+                int product_id = rs.getInt("product_id");
+                int category_id = rs.getInt("category_id");
+                String product_name = rs.getString("product_name");
+                int quantity = rs.getInt("quantity");
+                double price = rs.getDouble("price");
+                String imge = rs.getString("image");
+                String description = rs.getString("description");
+                list.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
+    
+    // lấy sản phẩm để thêm vào giỏ hàng
+    @Override
+    public List<Product> getProductById(int productid){
+        List<Product> ListProduct = new ArrayList<>();
+        String sql = "select * from products where product_id = ?";
+        PreparedStatement sttm;
+        try {
+            sttm = con.prepareStatement(sql);
+            sttm.setInt(1, productid);
+            ResultSet rs = sttm.executeQuery();
+            while (rs.next()) {
+                int product_id = rs.getInt("product_id");
+                int category_id = rs.getInt("category_id");
+                String product_name = rs.getString("product_name");
+                int quantity = rs.getInt("quantity");
+                double price = rs.getDouble("price");
+                String imge = rs.getString("image");
+                String description = rs.getString("description");
+                ListProduct.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
+            }
+        } catch (Exception e) {
+        }
+        return ListProduct;
+    }
+    
+    
+    
+    public static void main(String[] args) {
+        ProductImpl dao = new ProductImpl();
+        List<Product> list = dao.getProductById(1);
+        for (Product product : list) {
+            System.out.println(product);
+        }
+ 
+    }
+    
+    
+    
+//    @Override
+//    public List<Product> find(String keyword) {
+//        List<Product> listFind = new ArrayList<>();
+//        String sql = "select * from products where product_name like N?";
+//        PreparedStatement sttm;
+//        try {
+//            sttm = con.prepareStatement(sql);
+//            sttm.setString(1, "%" + keyword +"%");
+//            ResultSet rs = sttm.executeQuery();
+//            
+//            while (rs.next()) {
+//                int product_id = rs.getInt("product_id");
+//                int category_id = rs.getInt("category_id");
+//                String product_name = rs.getString("product_name");
+//                int quantity = rs.getInt("quantity");
+//                double price = rs.getDouble("price");
+//                String imge = rs.getString("image");
+//                String description = rs.getString("description");
+//                listFind.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
+//            }
+//            
+//        } catch (SQLException ex) {
+//            Logger.getLogger(ProductImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        return listFind;
+//    }
+//    
+    
+    
+    
+    
+    
+    
+    
 }
