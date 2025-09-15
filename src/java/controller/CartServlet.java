@@ -70,12 +70,13 @@ public class CartServlet extends HttpServlet {
             response.sendRedirect("Login");
             return;
         }
-
+        // lấy ra danh sách các mặt hàng
         List<CartItem> items = Database.getCartDao().GetItems(cartId);
-        //double total = Database.getCartDao().getTotal(cartId);
-
         request.setAttribute("items", items);
-        //request.setAttribute("total", total);
+        
+        // lấy tính tổng số lượng
+        double total = Database.getCartDao().getTotal(cartId);
+        request.setAttribute("total", total);
 
         request.getRequestDispatcher("./Views/Cart.jsp").forward(request, response);
     }

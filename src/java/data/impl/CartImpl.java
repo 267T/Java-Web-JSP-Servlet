@@ -27,10 +27,11 @@ public class CartImpl implements CartDao {
     // kiểm tra xem giỏ hàng đã có chưa để khởi tạo
     @Override
     public Cart findActiveCartByUserId(int user_id) {
-        String sql = "SELECT cart_id, user_id, status, create_at FROM carts WHERE user_id = ? AND status = 'Active' limit 1";
+        String sql = "SELECT cart_id, user_id, status, created_at FROM carts WHERE user_id = ? AND status = 'Active'";
         try {
             PreparedStatement sttm = con.prepareStatement(sql);
             sttm.setInt(1, user_id);
+                 
             ResultSet rs = sttm.executeQuery();
             if (rs.next()) {
                 return new Cart(
@@ -70,7 +71,7 @@ public class CartImpl implements CartDao {
     @Override
     public List<CartItem> GetItems(int cart_id) {
         List<CartItem> items = new ArrayList<>();
-        String sql = "SELECT cart_items.item_id, cart_items.cart_id, cart_items.product_id, cart_items.quantity, products.product_name, products.price, products.description, products.image FROM cart_items JOIN products ON cart_items.product_id = products.product_id WHERE cart_items.cart_id = ?";
+        String sql ="SELECT categories.category_id, cart_items.item_id, cart_items.cart_id, cart_items.product_id, cart_items.quantity, products.product_name, products.price, products.description, products.image FROM cart_items JOIN products ON cart_items.product_id = products.product_id JOIN categories ON products.category_id = categories.category_id WHERE cart_items.cart_id = ?";
         try {
             PreparedStatement sttm = con.prepareStatement(sql);
             sttm.setInt(1, cart_id);
@@ -104,6 +105,7 @@ public class CartImpl implements CartDao {
                 items.add(item);
             }
         } catch (Exception e) {
+            
         }
         return items;
     }
@@ -111,16 +113,15 @@ public class CartImpl implements CartDao {
     // lấy tổng số tiền cần thanh toán
     @Override
     public double getTotal(int cart_id) {
-        String sql = "SELECT SUM(ci.quantity * p.price) FROM cart_items ci JOIN products p ON ci.product_id = p.product_id WHERE ci.cart_id = ?";
+        String sql = "SELECT SUM(cart_items.quantity * products.price) FROM cart_items JOIN products ON cart_items.product_id = products.product_id WHERE cart_items.cart_id = ?";
         try {
             PreparedStatement sttm = con.prepareStatement(sql);
             sttm.setInt(1, cart_id);
             ResultSet rs = sttm.executeQuery();
             if (rs.next()) {
-                return rs.getDouble("total");
+                return rs.getDouble(1);
             }
-        } catch (Exception e) {
-            
+        } catch (Exception e) { 
         }
         return 0;
     }

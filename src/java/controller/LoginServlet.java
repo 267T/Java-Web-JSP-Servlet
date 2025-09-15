@@ -124,6 +124,7 @@ public class LoginServlet extends HttpServlet {
             }else{ //có rồi thì lấy id của giỏ hàng ra
                 cartId = cart.getCartId();
             }
+            
             // lưu cartId vào session để dùng cho sevelect
             request.getSession().setAttribute("CartId",cartId); 
             // Lấy họ và tên 
