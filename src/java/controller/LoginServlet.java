@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Cart;
 import model.User;
 
 /**
@@ -116,7 +117,16 @@ public class LoginServlet extends HttpServlet {
             request.getSession().removeAttribute("error");
             request.getSession().setAttribute("isLoggedInUser", true); // lưu lại sesion đăng nhập của người dùng
             request.getSession().setAttribute("user", user);
+            Cart cart = Database.getCartDao().findActiveCartByUserId(user.getId());
+            int cartId;
+            if(cart == null){ // chưa có giỏ hàng thì tạo mới
+                cartId = Database.getCartDao().CreateCart(user.getId());
+            }else{ //có rồi thì lấy id của giỏ hàng ra
+                cartId = cart.getCartId();
+            }
             
+            // lưu cartId vào session để dùng cho sevelect
+            request.getSession().setAttribute("CartId",cartId); 
             // Lấy họ và tên 
             String splitname = user.getName();
             request.getSession().setAttribute("splitname", splitname);

@@ -158,39 +158,33 @@ public class ProductImpl implements ProductDao {
     
     
     
-//    @Override
-//    public List<Product> find(String keyword) {
-//        List<Product> listFind = new ArrayList<>();
-//        String sql = "select * from products where product_name like N?";
-//        PreparedStatement sttm;
-//        try {
-//            sttm = con.prepareStatement(sql);
-//            sttm.setString(1, "%" + keyword +"%");
-//            ResultSet rs = sttm.executeQuery();
-//            
-//            while (rs.next()) {
-//                int product_id = rs.getInt("product_id");
-//                int category_id = rs.getInt("category_id");
-//                String product_name = rs.getString("product_name");
-//                int quantity = rs.getInt("quantity");
-//                double price = rs.getDouble("price");
-//                String imge = rs.getString("image");
-//                String description = rs.getString("description");
-//                listFind.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
-//            }
-//            
-//        } catch (SQLException ex) {
-//            Logger.getLogger(ProductImpl.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        return listFind;
-//    }
-//    
-    
-    
-    
-    
-    
+    @Override
+    public List<Product> find(String keyword) {
+        List<Product> listFind = new ArrayList<>();
+        String sql = "select * from products where product_name like N?";
+        PreparedStatement sttm;
+        try {
+            sttm = con.prepareStatement(sql);
+            sttm.setString(1, "%" + keyword +"%");
+            ResultSet rs = sttm.executeQuery();
+            
+            while (rs.next()) {
+                int product_id = rs.getInt("product_id");
+                int category_id = rs.getInt("category_id");
+                String product_name = rs.getString("product_name");
+                int quantity = rs.getInt("quantity");
+                double price = rs.getDouble("price");
+                String imge = rs.getString("image");
+                String description = rs.getString("description");
+                listFind.add(new Product(product_id, category_id, product_name, description, price, imge, quantity));
+            }
+            
+        } catch (SQLException ex) {
+            
+        }
+
+        return listFind;
+    }
     
     
 }
