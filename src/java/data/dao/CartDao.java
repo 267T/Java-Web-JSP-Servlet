@@ -23,7 +23,10 @@ public interface CartDao {
     public double getTotal(int cart_id);
     
     
-    
+    // xóa sản phẩm theo id 
+    public boolean  DeleteProduct(int productId);
+    // update số lượng 
+    public boolean UpdateCartProduct(int productId, String action, int cart_id);
     
     
     public void AddItem(int cart_id,Product product, int quantily);

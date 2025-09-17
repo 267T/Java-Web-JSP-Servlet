@@ -32,13 +32,24 @@
                             </div>
                             <p class="mt-1 text-sm text-gray-500">SL: ${it.quantity}</p>
                             <div class="flex flex-1 items-end justify-between text-sm">
-                                <form action="Cart" method="post">
-                                    <input type="hidden" name="action" value="remove"/>
+                                <form action="Cart" method="post" class="inline">
+                                    <input type="hidden" name="action" value="increase"/>
                                     <input type="hidden" name="id" value="${it.product.product_id}"/>
-                                    <button type="submit" class="font-medium text-indigo-600 hover:text-indigo-500">
-                                        Xóa
-                                    </button>
+                                    <button type="submit" class="px-2 text-green-600">+</button>
                                 </form>
+
+                                <form action="Cart" method="post" class="inline">
+                                    <input type="hidden" name="action" value="decrease"/>
+                                    <input type="hidden" name="id" value="${it.product.product_id}"/>
+                                    <button type="submit" class="px-2 text-yellow-600">trừ</button>
+                                </form>
+
+                                <form action="Cart" method="post" class="inline">
+                                    <input type="hidden" name="action" value="delete"/>
+                                    <input type="hidden" name="id" value="${it.product.product_id}"/>
+                                    <button type="submit" class="px-2 text-red-600">Xóa</button>
+                                </form>
+
                             </div>
                         </div>
                     </li>

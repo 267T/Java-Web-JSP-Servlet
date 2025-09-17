@@ -4,9 +4,12 @@
  */
 package controller;
 
+import data.dao.CategoryDao;
 import data.dao.ProductDao;
+import data.impl.CategoryImpl;
 import data.impl.ProductImpl;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,8 +22,8 @@ import model.Product;
  *
  * @author Admin
  */
-@WebServlet(name = "FindProductServlet", urlPatterns = {"/FindProduct"})
-public class FindProductServlet extends HttpServlet {
+@WebServlet(name = "ProductDetailsServlet", urlPatterns = {"/ProductDetails"})
+public class ProductDetailsServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,26 +37,17 @@ public class FindProductServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try {
-            // xử lí tìm kiếm 
-            List<Product> listproduct = null;
-            String keyword = request.getParameter("keyword");
-            ProductDao productDao = new ProductImpl();
-
-            if (keyword != null || !keyword.trim().isEmpty()) {
-                listproduct = productDao.find(keyword.trim());
-                request.setAttribute("keyword", keyword);
-                if (listproduct == null || listproduct.isEmpty()) {
-                    request.setAttribute("error_find", "Không tìm thấy sản phẩm: " + keyword);
-                }
-            }
-           
-            // đẩy dữ liệu sang trang jsp
-            request.setAttribute("listProduct", listproduct);
-            request.setAttribute("title", "Kết quả tìm kiếm");
-            request.getRequestDispatcher("Views/ResultSearch.jsp").forward(request, response);
-
-        } catch (Exception e) {
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ProductDetailsServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ProductDetailsServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
@@ -69,6 +63,23 @@ public class FindProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //processRequest(request, response);
+        
+        int id  = Integer.parseInt(request.getParameter("id"));
+        ProductDao productDao = new ProductImpl();
+        CategoryDao categoryDao = new CategoryImpl();
+        
+        List<Product> listproduct;
+        listproduct = productDao.getProductById(id);
+        
+        
+        String cate = categoryDao.GetCateByProductID(id);
+
+    
+        request.setAttribute("listproduct", listproduct);
+        request.setAttribute("category", cate);
+        
+        request.getRequestDispatcher("Views/ProductDetails.jsp").forward(request, response);
     }
 
     /**
@@ -82,7 +93,8 @@ public class FindProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        
     }
 
     /**

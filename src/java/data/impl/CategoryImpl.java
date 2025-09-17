@@ -139,4 +139,20 @@ public class CategoryImpl implements CategoryDao {
         }
         return null;
     }
+    // lấy cate theo productid
+    @Override
+    public String GetCateByProductID (int productId) {
+        String sql = "SELECT categories.category_name FROM products JOIN categories ON products.product_id = categories.category_id WHERE products.product_id = ?";
+        try {
+            PreparedStatement sttm = con.prepareStatement(sql);
+            sttm.setInt(1, productId);
+            ResultSet rs = sttm.executeQuery();
+            if (rs.next()) {
+                return rs.getString("category_name");
+            }
+        } catch (SQLException ex) {
+            
+        }
+        return null;
+    }
 }

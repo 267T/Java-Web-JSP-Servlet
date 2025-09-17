@@ -145,19 +145,6 @@ public class ProductImpl implements ProductDao {
         return ListProduct;
     }
     
-    
-    
-    public static void main(String[] args) {
-        ProductImpl dao = new ProductImpl();
-        List<Product> list = dao.getProductById(1);
-        for (Product product : list) {
-            System.out.println(product);
-        }
- 
-    }
-    
-    
-    
     @Override
     public List<Product> find(String keyword) {
         List<Product> listFind = new ArrayList<>();

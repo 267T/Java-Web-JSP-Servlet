@@ -9,9 +9,12 @@ import data.driver.MySQLDriver;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Statement;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Cart;
 import model.CartItem;
 import model.Product;
@@ -126,14 +129,15 @@ public class CartImpl implements CartDao {
         return 0;
     }
     
+    @Override
     // thêm sản phẩm vào giỏ hàng
     public void AddItem(int cart_id, Product product, int quantity) {
         String checkSql = "SELECT quantity FROM cart_items WHERE cart_id = ? AND product_id = ?";
         try {
-            PreparedStatement check = con.prepareStatement(checkSql);
-            check.setInt(1, cart_id);
-            check.setInt(2, product.getProduct_id());
-            ResultSet rs = check.executeQuery();
+            PreparedStatement sttm = con.prepareStatement(checkSql);
+            sttm.setInt(1, cart_id);
+            sttm.setInt(2, product.getProduct_id());
+            ResultSet rs = sttm.executeQuery();
 
             if (rs.next()) {
                 // Nếu đã tồn tại -> update số lượng
@@ -157,5 +161,56 @@ public class CartImpl implements CartDao {
             
         }
     }
+    
+    // xóa sản phẩm theo id
+    @Override
+    public boolean DeleteProduct(int productId){
+        String sql = "DELETE FROM cart_items WHERE product_id = ?";
+        try {
+            PreparedStatement sttm = con.prepareStatement(sql);
+            sttm.setInt(1, productId);
+            int rowAffected = sttm.executeUpdate();
+            return rowAffected > 0;
+        } catch (Exception e) {
+        }
+        return false;
+    }
+    
+    // update số lượng sản phẩm
+    @Override
+    public boolean UpdateCartProduct(int productId, String action, int cart_id){
+        String sql = "";
+        switch (action) {
+            case "increase": // tăng số lượng
+                sql = "UPDATE cart_items SET cart_items.quantity = cart_items.quantity + 1 WHERE cart_items.product_id = ? and cart_items.cart_id = ? ";
+                break;
+            case "decrease": // xóa bớt và xóa hẳn khi sl về 0
+                sql = "UPDATE cart_items SET cart_items.quantity = cart_items.quantity - 1 WHERE cart_items.product_id = ? And and cart_items.cart_id = ? quantity > 1 ";
+                break;
+            case "delete": // xóa hẳn
+                sql = "Delete from cart_items where product_id = ? and cart_items.cart_id = ?";
+                break;
+        }
+        PreparedStatement sttm;
+        try {
+            sttm = con.prepareStatement(sql);
+            sttm.setInt(1, productId);
+            sttm.setInt(2, cart_id);
+            int row = sttm.executeUpdate();
+            if("decrease".equals(action) && row == 0){ // nếu truy vấn ra 0 hàng thì nghĩa là quantily = 1 nên sẽ xóa hẳn
+                sql = "Delete from cart_items where product_id = ? cart_items.cart_id = ?";
+                sttm = con.prepareStatement(sql);
+                sttm.setInt(1, productId);
+                sttm.setInt(2, cart_id);
+                sttm.executeUpdate();
+            }
+            return row > 0;
+        } catch (SQLException ex) { 
+        }    
+        return false;
+    }
+    
+
+    
 
 }

@@ -4,8 +4,10 @@
  */
 package controller;
 
+import data.dao.CategoryDao;
 import data.dao.Database;
 import data.dao.ProductDao;
+import data.impl.CategoryImpl;
 import data.impl.ProductImpl;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,9 +16,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.CartItem;
+import model.Category;
 import model.Product;
 
 /**
@@ -92,6 +94,14 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        ProductDao productDao = new ProductImpl();
+        CategoryDao categoryDao = new CategoryImpl();
+        
+        List<Product> listproduct;
+        List<Category> listcategory;
+       
+        
         String action = request.getParameter("action"); // lấy hành động
         int product_id = Integer.parseInt(request.getParameter("id")); // lấy id của mặt hàng
         
@@ -102,9 +112,15 @@ public class CartServlet extends HttpServlet {
             return;
         }
         if("add".equals(action)){
-            Product product = Database.getProductDao().getProductById(product_id).get(0);
+            Product product = productDao.getProductById(product_id).get(0);
             Database.getCartDao().AddItem(cart_id, product, 1);
         }
+        
+        //int product_iD = Integer.parseInt(request.getParameter("product_id"));
+
+        if("delete".equals(action) ||"decrease".equals(action) ||"increase".equals(action)){
+            Database.getCartDao().UpdateCartProduct(product_id, action, cart_id);
+        }   
         response.sendRedirect("Cart");
     }
 

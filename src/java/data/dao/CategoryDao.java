@@ -20,7 +20,8 @@ public interface CategoryDao {
     public boolean insertCategory(String name);
     public boolean CheckDuplicateInsertCategory(String name); // kiểm tra trùng lặp
     
-    
+    // lấy cate theo id của product
+    public String GetCateByProductID(int productId);
     
     public boolean update(int id, String name);
     public boolean delete(int id);
